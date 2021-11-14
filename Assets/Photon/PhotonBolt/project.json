@@ -1,6 +1,343 @@
 {
   "$type": "Photon.Bolt.Compiler.Assets.BoltProject, bolt.compiler",
   "Filters": [],
-  "Assets": [],
+  "Assets": [
+    {
+      "$type": "Photon.Bolt.Compiler.StateDefinition, bolt.compiler",
+      "Properties": [
+        {
+          "Name": "Transform",
+          "Enabled": true,
+          "Expanded": true,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Photon.Bolt.Compiler.PropertyTypeTransform, bolt.compiler",
+            "PositionSelection": 14,
+            "RotationSelection": 4,
+            "PositionCompression": [
+              {
+                "MinValue": -163,
+                "MaxValue": 163,
+                "Accuracy": 0.01,
+                "Enabled": true,
+                "Pack": 100.0,
+                "Read": 0.01,
+                "Shift": 163.0,
+                "BitsRequired": 15
+              },
+              {
+                "MinValue": -163,
+                "MaxValue": 163,
+                "Accuracy": 0.01,
+                "Enabled": true,
+                "Pack": 100.0,
+                "Read": 0.01,
+                "Shift": 163.0,
+                "BitsRequired": 15
+              },
+              {
+                "MinValue": -163,
+                "MaxValue": 163,
+                "Accuracy": 0.01,
+                "Enabled": true,
+                "Pack": 100.0,
+                "Read": 0.01,
+                "Shift": 163.0,
+                "BitsRequired": 15
+              }
+            ],
+            "RotationCompression": [
+              {
+                "MaxValue": 360,
+                "Accuracy": 0.01,
+                "Pack": 100.0,
+                "Read": 0.01,
+                "BitsRequired": 16
+              },
+              {
+                "MaxValue": 360,
+                "Accuracy": 0.01,
+                "Pack": 100.0,
+                "Read": 0.01,
+                "BitsRequired": 16
+              },
+              {
+                "MaxValue": 360,
+                "Accuracy": 0.01,
+                "Pack": 100.0,
+                "Read": 0.01,
+                "BitsRequired": 16
+              }
+            ],
+            "RotationCompressionQuaternion": {
+              "MinValue": -1,
+              "MaxValue": 1,
+              "Accuracy": 0.01,
+              "Pack": 100.0,
+              "Read": 0.01,
+              "Shift": 1.0,
+              "BitsRequired": 8
+            }
+          },
+          "AssetSettings": {
+            "$type": "Photon.Bolt.Compiler.PropertyStateSettings, bolt.compiler",
+            "ExtrapolationErrorTolerance": 0.25,
+            "_ExtrapolationCorrectionFrames": 6,
+            "ExtrapolationMaxFrames": 9,
+            "SnapMagnitude": 10.0
+          }
+        }
+      ],
+      "PacketMaxBits": 512,
+      "PacketMaxProperties": 16,
+      "InitialPositionCompression": {
+        "Compression": [
+          {
+            "MinValue": -1024,
+            "MaxValue": 1024,
+            "Accuracy": 0.01,
+            "Pack": 100.0,
+            "Read": 0.01,
+            "Shift": 1024.0,
+            "BitsRequired": 18
+          },
+          {
+            "MinValue": -1024,
+            "MaxValue": 1024,
+            "Accuracy": 0.01,
+            "Pack": 100.0,
+            "Read": 0.01,
+            "Shift": 1024.0,
+            "BitsRequired": 18
+          },
+          {
+            "MinValue": -1024,
+            "MaxValue": 1024,
+            "Accuracy": 0.01,
+            "Pack": 100.0,
+            "Read": 0.01,
+            "Shift": 1024.0,
+            "BitsRequired": 18
+          }
+        ]
+      },
+      "InitialRotationCompression": {
+        "EulerCompression": [
+          {
+            "MaxValue": 360,
+            "Accuracy": 1.0,
+            "Pack": 1.0,
+            "Read": 1.0,
+            "BitsRequired": 9
+          },
+          {
+            "MaxValue": 360,
+            "Accuracy": 1.0,
+            "Pack": 1.0,
+            "Read": 1.0,
+            "BitsRequired": 9
+          },
+          {
+            "MaxValue": 360,
+            "Accuracy": 1.0,
+            "Pack": 1.0,
+            "Read": 1.0,
+            "BitsRequired": 9
+          }
+        ],
+        "QuaternionCompression": {
+          "MinValue": -1,
+          "MaxValue": 1,
+          "Accuracy": 0.01,
+          "Pack": 100.0,
+          "Read": 0.01,
+          "Shift": 1.0,
+          "BitsRequired": 8
+        }
+      },
+      "Name": "PhysicState",
+      "Guid": "1b859873-cd42-42da-9c12-5a5f7f53b3ba",
+      "Groups": []
+    },
+    {
+      "$type": "Photon.Bolt.Compiler.EventDefinition, bolt.compiler",
+      "Properties": [],
+      "GlobalSenders": 2,
+      "Name": "SpawnPlayerEvent",
+      "Guid": "76d5861e-f075-40b0-9f4f-2dfdb5c678ba",
+      "Groups": []
+    },
+    {
+      "$type": "Photon.Bolt.Compiler.CommandDefinition, bolt.compiler",
+      "Input": [
+        {
+          "Name": "Forward",
+          "Enabled": true,
+          "Expanded": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Photon.Bolt.Compiler.PropertyTypeBool, bolt.compiler"
+          },
+          "AssetSettings": {
+            "$type": "Photon.Bolt.Compiler.PropertyCommandSettings, bolt.compiler"
+          }
+        },
+        {
+          "Name": "Backward",
+          "Enabled": true,
+          "Expanded": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Photon.Bolt.Compiler.PropertyTypeBool, bolt.compiler"
+          },
+          "AssetSettings": {
+            "$type": "Photon.Bolt.Compiler.PropertyCommandSettings, bolt.compiler"
+          }
+        },
+        {
+          "Name": "Left",
+          "Enabled": true,
+          "Expanded": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Photon.Bolt.Compiler.PropertyTypeBool, bolt.compiler"
+          },
+          "AssetSettings": {
+            "$type": "Photon.Bolt.Compiler.PropertyCommandSettings, bolt.compiler"
+          }
+        },
+        {
+          "Name": "Right",
+          "Enabled": true,
+          "Expanded": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Photon.Bolt.Compiler.PropertyTypeBool, bolt.compiler"
+          },
+          "AssetSettings": {
+            "$type": "Photon.Bolt.Compiler.PropertyCommandSettings, bolt.compiler"
+          }
+        },
+        {
+          "Name": "Yaw",
+          "Enabled": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Photon.Bolt.Compiler.PropertyTypeFloat, bolt.compiler",
+            "Compression": {
+              "MinValue": -2048,
+              "MaxValue": 2048,
+              "Accuracy": 0.01,
+              "Pack": 100.0,
+              "Read": 0.01,
+              "Shift": 2048.0,
+              "BitsRequired": 19
+            }
+          },
+          "AssetSettings": {
+            "$type": "Photon.Bolt.Compiler.PropertyCommandSettings, bolt.compiler"
+          }
+        },
+        {
+          "Name": "Pitch",
+          "Enabled": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Photon.Bolt.Compiler.PropertyTypeFloat, bolt.compiler",
+            "Compression": {
+              "MinValue": -2048,
+              "MaxValue": 2048,
+              "Accuracy": 0.01,
+              "Pack": 100.0,
+              "Read": 0.01,
+              "Shift": 2048.0,
+              "BitsRequired": 19
+            }
+          },
+          "AssetSettings": {
+            "$type": "Photon.Bolt.Compiler.PropertyCommandSettings, bolt.compiler"
+          }
+        }
+      ],
+      "Result": [
+        {
+          "Name": "Position",
+          "Enabled": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Photon.Bolt.Compiler.PropertyTypeVector, bolt.compiler",
+            "Selection": 14,
+            "Compression": [
+              {
+                "MinValue": -163,
+                "MaxValue": 163,
+                "Accuracy": 0.01,
+                "Enabled": true,
+                "Pack": 100.0,
+                "Read": 0.01,
+                "Shift": 163.0,
+                "BitsRequired": 15
+              },
+              {
+                "MinValue": -163,
+                "MaxValue": 163,
+                "Accuracy": 0.01,
+                "Enabled": true,
+                "Pack": 100.0,
+                "Read": 0.01,
+                "Shift": 163.0,
+                "BitsRequired": 15
+              },
+              {
+                "MinValue": -163,
+                "MaxValue": 163,
+                "Accuracy": 0.01,
+                "Enabled": true,
+                "Pack": 100.0,
+                "Read": 0.01,
+                "Shift": 163.0,
+                "BitsRequired": 15
+              }
+            ]
+          },
+          "AssetSettings": {
+            "$type": "Photon.Bolt.Compiler.PropertyCommandSettings, bolt.compiler"
+          }
+        },
+        {
+          "Name": "Rotation",
+          "Enabled": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Photon.Bolt.Compiler.PropertyTypeFloat, bolt.compiler",
+            "Compression": {
+              "MinValue": -2048,
+              "MaxValue": 2048,
+              "Accuracy": 0.01,
+              "Pack": 100.0,
+              "Read": 0.01,
+              "Shift": 2048.0,
+              "BitsRequired": 19
+            }
+          },
+          "AssetSettings": {
+            "$type": "Photon.Bolt.Compiler.PropertyCommandSettings, bolt.compiler"
+          }
+        }
+      ],
+      "Properties": [],
+      "Name": "PlayerCommand",
+      "Guid": "b37d696a-1fb1-431e-b1a7-65d8549d0692",
+      "Groups": []
+    }
+  ],
   "ActiveGroup": "Everything"
 }
