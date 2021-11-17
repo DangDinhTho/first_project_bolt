@@ -166,7 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _map: arena
   _roomID: Test
-  _isServer: 1
+  _isServer: 0
 --- !u!1 &1612838227
 GameObject:
   m_ObjectHideFlags: 0

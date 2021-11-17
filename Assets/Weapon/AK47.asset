@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85844a2a4885ad54f8780949bae58d91, type: 3}
+  m_Name: AK47
+  m_EditorClassIdentifier: 
+  ID: 4
+  weaponName: AK47
+  reloadTime: 1
+  magazin: 30
+  totalMagazin: 120
+  ammoPerShot: 1
+  multiShot: 1
+  rpm: 600
+  dmg: 25
+  maxRange: 30
+  precision: 0.3
+  trail: {fileID: 4702667814176607556, guid: 2d270454b346e0e4ebf8c8fa08709fc0, type: 3}
+  decal: {fileID: 5285381483330770337, guid: dc8d4be3118522743a691177b1d82dc5, type: 3}
+  impact: {fileID: 7999600286410850556, guid: 3a6a23c9bede58b43a346877860e274a, type: 3}
+  drop: {fileID: 6377944182474237443, guid: 2c01d020e260f1e44baaadff9b2d76e2, type: 3}

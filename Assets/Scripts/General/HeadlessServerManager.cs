@@ -30,11 +30,6 @@ public class HeadlessServerManager : GlobalEventListener
         return s_map;
     }
 
-    public override void BoltStartBegin()
-    {
-        BoltNetwork.RegisterTokenClass<PhotonRoomProperties>();
-    }
-
     public override void BoltStartDone()
     {
         if (BoltNetwork.IsServer)
