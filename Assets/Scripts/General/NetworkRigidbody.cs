@@ -38,6 +38,16 @@ public class NetworkRigidbody : EntityBehaviour<IPhysicState>
         _rb = GetComponent<Rigidbody>();
     }
 
+    private void OnEnable()
+    {
+        _rb.isKinematic = false;
+    }
+
+    private void OnDisable()
+    {
+        _rb.isKinematic = true;
+    }
+
     public override void Attached()
     {
         state.SetTransforms(state.Transform, transform);

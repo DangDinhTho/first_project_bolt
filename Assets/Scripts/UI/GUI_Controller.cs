@@ -30,14 +30,33 @@ public class GUI_Controller : MonoBehaviour
     private UI_Cooldown _skill = null;
     [SerializeField]
     private UI_Cooldown _grenade = null;
+
     [SerializeField]
     private Text _energyCount = null;
+
     public UI_Cooldown Skill { get => _skill; }
     public UI_Cooldown Grenade { get => _grenade; }
+    public Team GuiTeam { set => _guiTeam = value; }
 
     [SerializeField]
     private Image _blindMask = null;
     Coroutine blind;
+
+    [SerializeField]
+    private UI_PlayerPlate[] _allayPlates = null;
+    [SerializeField]
+    private UI_PlayerPlate[] _enemyPlates = null;
+    [SerializeField]
+    private Sprite[] _icons = null;
+
+    Team _guiTeam = Team.AT;
+    [SerializeField]
+    private Text _allayScore = null;
+    [SerializeField]
+    private Text _enemyScore = null;
+
+    [SerializeField]
+    private UI_Timer _timer = null;
 
     private void Start()
     {
@@ -51,7 +70,6 @@ public class GUI_Controller : MonoBehaviour
         _skill.gameObject.SetActive(active);
         _grenade.gameObject.SetActive(active);
         _energyCount.transform.parent.gameObject.SetActive(active);
-
     }
 
     public void UpdateLife(int current, int total)
@@ -81,7 +99,6 @@ public class GUI_Controller : MonoBehaviour
 
     public void Flash()
     {
-
         if (blind != null)
             StopCoroutine(blind);
         blind = StartCoroutine(CRT_Blind(3f));
@@ -101,5 +118,56 @@ public class GUI_Controller : MonoBehaviour
             }
         }
         _blindMask.color = new Color(1, 1, 1, 0);
+    }
+
+    public void UpdatePlayersPlate(GameObject[] players, GameObject localPlayer)
+    {
+        PlayerMotor pm;
+        PlayerToken pt;
+
+        if (localPlayer != null)
+        {
+            pm = localPlayer.GetComponent<PlayerMotor>();
+            pt = (PlayerToken)pm.entity.AttachToken;
+
+            _allayPlates[(int)pt.playerSquadID].Init(_icons[(int)pt.characterClass]);
+            _allayPlates[(int)pt.playerSquadID].Death(pm.state.IsDead);
+        }
+
+        foreach (GameObject p in players)
+        {
+            pm = p.GetComponent<PlayerMotor>();
+            pt = (PlayerToken)pm.entity.AttachToken;
+
+            if (pm.IsEnemy)
+            {
+                _enemyPlates[(int)pt.playerSquadID].Init(_icons[(int)pt.characterClass]);
+                _enemyPlates[(int)pt.playerSquadID].Death(pm.state.IsDead);
+            }
+            else
+            {
+                _allayPlates[(int)pt.playerSquadID].Init(_icons[(int)pt.characterClass]);
+                _allayPlates[(int)pt.playerSquadID].Death(pm.state.IsDead);
+            }
+        }
+    }
+
+    public void UpdatePoints(int AT, int TT)
+    {
+        if (_guiTeam == Team.AT)
+        {
+            _allayScore.text = AT.ToString();
+            _enemyScore.text = TT.ToString();
+        }
+        else
+        {
+            _allayScore.text = TT.ToString();
+            _enemyScore.text = AT.ToString();
+        }
+    }
+
+    public void UpdateTimer(float f)
+    {
+        _timer.Init(f);
     }
 }

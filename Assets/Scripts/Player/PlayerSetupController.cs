@@ -161,9 +161,9 @@ public class PlayerSetupController : GlobalEventListener
             {
                 _teamSelector.SetActive(false);
                 _classSelector.SetActive(true);
+                _playerSquad = (PlayerSquadID)evnt.SquadID;
+                GUI_Controller.Current.GuiTeam = (Team)evnt.Team;
             }
-
-            _playerSquad = (PlayerSquadID)evnt.SquadID;
 
             if (BoltNetwork.IsClient)
                 AddTeamCount((Team)evnt.Team);
@@ -205,7 +205,7 @@ public class PlayerSetupController : GlobalEventListener
     public void RaiseSpawnPlayerEvent(int index)
     {
         SpawnPlayerEvent spawn = SpawnPlayerEvent.Create(GlobalTargets.OnlyServer);
-        spawn.PlayerName = "TODO";
+        spawn.PlayerName = AppManager.Current.Username;
         spawn.Team = (short)_selectedTeam;
         spawn.Class = index;
         spawn.SquadID = (short)_playerSquad;
@@ -216,6 +216,7 @@ public class PlayerSetupController : GlobalEventListener
     {
         var token = new PlayerToken();
         token.team = (Team)evnt.Team;
+        token.name = evnt.PlayerName;
         token.playerSquadID = (PlayerSquadID)evnt.SquadID;
         token.characterClass = (CharacterClass)evnt.Class;
 
@@ -250,5 +251,25 @@ public class PlayerSetupController : GlobalEventListener
                 break;
         }
         entity.AssignControl(evnt.RaisedBy);
+    }
+
+    public Vector3 GetSpawnPoint(Team t)
+    {
+        Vector3 v = Vector3.zero;
+
+        if (t == Team.TT)
+        {
+            v = _TTBase.transform.position;
+            v.x += Random.Range(-_TTBase.localScale.x / 2f, _TTBase.localScale.x / 2f);
+            v.z += Random.Range(-_TTBase.localScale.z / 2f, _TTBase.localScale.z / 2f);
+        }
+        else
+        {
+            v = _ATBase.transform.position;
+            v.x += Random.Range(-_ATBase.localScale.x / 2f, _ATBase.localScale.x / 2f);
+            v.z += Random.Range(-_ATBase.localScale.z / 2f, _ATBase.localScale.z / 2f);
+        }
+
+        return v;
     }
 }

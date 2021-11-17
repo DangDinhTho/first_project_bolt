@@ -4,10 +4,17 @@ using UnityEngine;
 using Photon.Bolt.Matchmaking;
 using Photon.Bolt;
 
-public class NetworkManager : Photon.Bolt.GlobalEventListener
+public class NetworkManager : GlobalEventListener
 {
     [SerializeField]
     private UnityEngine.UI.Text feedback;
+    [SerializeField]
+    private UnityEngine.UI.InputField username;
+
+    private void Awake()
+    {
+        username.text = AppManager.Current.Username;
+    }
 
     public void FeedbackUser(string text)
     {
@@ -16,8 +23,14 @@ public class NetworkManager : Photon.Bolt.GlobalEventListener
 
     public void Connect()
     {
-        FeedbackUser("Connnecting ...");
-        BoltLauncher.StartClient();
+        if (username.text != "")
+        {
+            AppManager.Current.Username = username.text;
+            BoltLauncher.StartClient();
+            FeedbackUser("Connnecting ...");
+        }
+        else
+            FeedbackUser("Enter a valid name");
     }
 
     public override void SessionListUpdated(Map<Guid, UdpSession> sessionList)

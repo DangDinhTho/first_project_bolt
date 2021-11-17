@@ -23,6 +23,7 @@ public class PlayerMotor : EntityBehaviour<IPlayerState>
     private int _totalLife = 250;
 
     SphereCollider _headCollider;
+    CapsuleCollider _capsuleCollider;
 
     [SerializeField]
     private Ability _skill = null;
@@ -40,6 +41,7 @@ public class PlayerMotor : EntityBehaviour<IPlayerState>
     {
         _networkRigidbody = GetComponent<NetworkRigidbody>();
         _headCollider = GetComponent<SphereCollider>();
+        _capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
     public void Init(bool isMine)
@@ -80,45 +82,48 @@ public class PlayerMotor : EntityBehaviour<IPlayerState>
 
     public State ExecuteCommand(bool forward, bool backward, bool left, bool right, bool jump, float yaw, float pitch, bool ability1, bool ability2)
     {
-        Vector3 movingDir = Vector3.zero;
-        if (forward ^ backward)
+        if (!state.IsDead)
         {
-            movingDir += forward ? transform.forward : -transform.forward;
-        }
-        if (left ^ right)
-        {
-            movingDir += right ? transform.right : -transform.right;
-        }
-
-        if (jump)
-        {
-            if (_jumpPressed == false && _isGrounded)
+            Vector3 movingDir = Vector3.zero;
+            if (forward ^ backward)
             {
-                _isGrounded = false;
-                _jumpPressed = true;
-                _networkRigidbody.MoveVelocity += Vector3.up * _jumpForce;
+                movingDir += forward ? transform.forward : -transform.forward;
             }
+            if (left ^ right)
+            {
+                movingDir += right ? transform.right : -transform.right;
+            }
+
+            if (jump)
+            {
+                if (_jumpPressed == false && _isGrounded)
+                {
+                    _isGrounded = false;
+                    _jumpPressed = true;
+                    _networkRigidbody.MoveVelocity += Vector3.up * _jumpForce;
+                }
+            }
+            else
+            {
+                if (_jumpPressed)
+                    _jumpPressed = false;
+            }
+
+            movingDir.Normalize();
+            movingDir *= _speed;
+            _networkRigidbody.MoveVelocity = new Vector3(movingDir.x, _networkRigidbody.MoveVelocity.y, movingDir.z);
+
+            _cam.transform.localEulerAngles = new Vector3(pitch, 0f, 0f);
+            transform.rotation = Quaternion.Euler(0, yaw, 0);
+
+            if (entity.IsOwner)
+                state.Pitch = (int)pitch;
+
+            if (_skill)
+                _skill.UpdateAbility(ability1);
+            if (_grenade)
+                _grenade.UpdateAbility(ability2);
         }
-        else
-        {
-            if (_jumpPressed)
-                _jumpPressed = false;
-        }
-
-        movingDir.Normalize();
-        movingDir *= _speed;
-        _networkRigidbody.MoveVelocity = new Vector3(movingDir.x, _networkRigidbody.MoveVelocity.y, movingDir.z);
-
-        _cam.transform.localEulerAngles = new Vector3(pitch, 0f, 0f);
-        transform.rotation = Quaternion.Euler(0, yaw, 0);
-
-        if (entity.IsOwner)
-            state.Pitch = (int)pitch;
-
-        if (_skill)
-            _skill.UpdateAbility(ability1);
-        if (_grenade)
-            _grenade.UpdateAbility(ability2);
 
         State stateMotor = new State();
         stateMotor.position = transform.position;
@@ -203,6 +208,7 @@ public class PlayerMotor : EntityBehaviour<IPlayerState>
             if (value < 0)
             {
                 state.LifePoints = 0;
+                state.IsDead = true;
             }
             else if (value > _totalLife)
             {
@@ -213,6 +219,13 @@ public class PlayerMotor : EntityBehaviour<IPlayerState>
                 state.LifePoints = value;
             }
         }
+    }
+
+    public void OnDeath(bool b)
+    {
+        _networkRigidbody.enabled = !b;
+        _headCollider.enabled = !b;
+        _capsuleCollider.enabled = !b;
     }
 
     public struct State

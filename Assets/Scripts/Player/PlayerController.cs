@@ -40,13 +40,17 @@ public class PlayerController : EntityBehaviour<IPhysicState>
         if (entity.HasControl)
         {
             _hasControl = true;
-            GUI_Controller.Current.Show(true);
         }
 
         Init(entity.HasControl);
         _playerMotor.Init(entity.HasControl);
         _playerRenderer.Init();
         _playerWeapons.Init();
+    }
+
+    public override void ControlGained()
+    {
+        GUI_Controller.Current.Show(true);
     }
 
     public void Init(bool isMine)

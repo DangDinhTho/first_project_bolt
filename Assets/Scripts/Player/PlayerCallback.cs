@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using Photon.Bolt;
+using System.Collections;
 
 public class PlayerCallback : EntityEventListener<IPlayerState>
 {
     private PlayerMotor _playerMotor;
     private PlayerWeapons _playerWeapons;
     private PlayerController _playerController;
+    private PlayerRenderer _playerRenderer;
 
     private void Awake()
     {
         _playerMotor = GetComponent<PlayerMotor>();
         _playerWeapons = GetComponent<PlayerWeapons>();
         _playerController = GetComponent<PlayerController>();
+        _playerRenderer = GetComponent<PlayerRenderer>();
     }
 
     public override void Attached()
@@ -19,15 +22,20 @@ public class PlayerCallback : EntityEventListener<IPlayerState>
         state.AddCallback("LifePoints", UpdatePlayerLife);
         state.AddCallback("Pitch", _playerMotor.SetPitch);
         state.AddCallback("Energy", UpdateEnergy);
+        state.AddCallback("IsDead", UpdateDeathState);
         state.AddCallback("WeaponIndex", UpdateWeaponIndex);
         state.AddCallback("Weapons[].ID", UpdateWeaponList);
         state.AddCallback("Weapons[].CurrentAmmo", UpdateWeaponAmmo);
         state.AddCallback("Weapons[].TotalAmmo", UpdateWeaponAmmo);
 
+
         if (entity.IsOwner)
         {
+            state.IsDead = false;
             state.LifePoints = _playerMotor.TotalLife;
             state.Energy = 6;
+            GameController.Current.UpdateGameState();
+            GameController.Current.state.AlivePlayers++;
         }
     }
 
@@ -54,14 +62,6 @@ public class PlayerCallback : EntityEventListener<IPlayerState>
         _playerWeapons.SetWeapon(state.WeaponIndex);
     }
 
-    public void UpdateEnergy()
-    {
-        if (entity.HasControl)
-        {
-            GUI_Controller.Current.UpdateAbilityView(state.Energy);
-        }
-    }
-
     public void FireEffect(float precision, int seed)
     {
         FireEffectEvent evnt = FireEffectEvent.Create(entity, EntityTargets.EveryoneExceptOwnerAndController);
@@ -81,6 +81,14 @@ public class PlayerCallback : EntityEventListener<IPlayerState>
             GUI_Controller.Current.UpdateLife(state.LifePoints, _playerMotor.TotalLife);
     }
 
+    public void UpdateEnergy()
+    {
+        if (entity.HasControl)
+        {
+            GUI_Controller.Current.UpdateAbilityView(state.Energy);
+        }
+    }
+
     public void RaiseFlashEvent()
     {
         FlashEvent evnt = FlashEvent.Create(entity, EntityTargets.OnlyController);
@@ -90,5 +98,62 @@ public class PlayerCallback : EntityEventListener<IPlayerState>
     public override void OnEvent(FlashEvent evnt)
     {
         GUI_Controller.Current.Flash();
+    }
+
+    private void UpdateDeathState()
+    {
+        if (entity.IsOwner)
+        {
+            if (state.IsDead)
+                GameController.Current.state.AlivePlayers--;
+            else
+                GameController.Current.state.AlivePlayers++;
+        }
+
+        if (entity.HasControl)
+            GUI_Controller.Current.Show(!state.IsDead);
+
+        _playerMotor.OnDeath(state.IsDead);
+        _playerRenderer.OnDeath(state.IsDead);
+        _playerWeapons.OnDeath(state.IsDead);
+    }
+
+    public void RoundReset(Team winner)
+    {
+        if (entity.IsOwner)
+        {
+            if (GameController.Current.CurrentPhase != GamePhase.Starting)
+            {
+                if (state.IsDead == true)
+                {
+                    state.IsDead = false;
+                    if (GameController.Current.CurrentPhase == GamePhase.WaitForPlayers)
+                    {
+                        state.Energy = 1;
+
+                        state.LifePoints = _playerMotor.TotalLife;
+                        state.SetTeleport(state.Transform);
+                        PlayerToken token = (PlayerToken)entity.AttachToken;
+                        transform.position = FindObjectOfType<PlayerSetupController>().GetSpawnPoint(token.team);
+                    }
+                }
+
+                if (GameController.Current.CurrentPhase == GamePhase.StartRound)
+                {
+                    if (state.Energy < 4)
+                        state.Energy += 1;
+
+                    PlayerToken token = (PlayerToken)entity.AttachToken;
+
+                    state.LifePoints = _playerMotor.TotalLife;
+                    state.SetTeleport(state.Transform);
+                    transform.position = FindObjectOfType<PlayerSetupController>().GetSpawnPoint(token.team);
+                }
+            }
+            else
+            {
+                state.Energy = 0;
+            }
+        }
     }
 }

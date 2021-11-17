@@ -232,7 +232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: f9a9dfdc-50b5-4b37-ba99-b3379b894dbd
-  _prefabId: 9
+  _prefabId: 10
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1
@@ -374,6 +374,7 @@ MonoBehaviour:
   _enemyColor: {r: 0.6603774, g: 0.15886435, b: 0.15886435, a: 1}
   _allyColor: {r: 0.082352936, g: 0.4352428, b: 0.63529414, a: 1}
   _camera: {fileID: 8539894738610633233}
+  _weaponView: {fileID: 6240452985948900875}
 --- !u!1 &4122425949219212565
 GameObject:
   m_ObjectHideFlags: 0
