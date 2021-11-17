@@ -18,15 +18,16 @@ public class PlayerCallback : EntityEventListener<IPlayerState>
     {
         state.AddCallback("LifePoints", UpdatePlayerLife);
         state.AddCallback("Pitch", _playerMotor.SetPitch);
+        state.AddCallback("Energy", UpdateEnergy);
         state.AddCallback("WeaponIndex", UpdateWeaponIndex);
         state.AddCallback("Weapons[].ID", UpdateWeaponList);
         state.AddCallback("Weapons[].CurrentAmmo", UpdateWeaponAmmo);
         state.AddCallback("Weapons[].TotalAmmo", UpdateWeaponAmmo);
 
-
         if (entity.IsOwner)
         {
             state.LifePoints = _playerMotor.TotalLife;
+            state.Energy = 6;
         }
     }
 
@@ -53,6 +54,14 @@ public class PlayerCallback : EntityEventListener<IPlayerState>
         _playerWeapons.SetWeapon(state.WeaponIndex);
     }
 
+    public void UpdateEnergy()
+    {
+        if (entity.HasControl)
+        {
+            GUI_Controller.Current.UpdateAbilityView(state.Energy);
+        }
+    }
+
     public void FireEffect(float precision, int seed)
     {
         FireEffectEvent evnt = FireEffectEvent.Create(entity, EntityTargets.EveryoneExceptOwnerAndController);
@@ -70,5 +79,16 @@ public class PlayerCallback : EntityEventListener<IPlayerState>
     {
         if (entity.HasControl)
             GUI_Controller.Current.UpdateLife(state.LifePoints, _playerMotor.TotalLife);
+    }
+
+    public void RaiseFlashEvent()
+    {
+        FlashEvent evnt = FlashEvent.Create(entity, EntityTargets.OnlyController);
+        evnt.Send();
+    }
+
+    public override void OnEvent(FlashEvent evnt)
+    {
+        GUI_Controller.Current.Flash();
     }
 }

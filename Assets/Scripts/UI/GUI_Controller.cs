@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GUI_Controller : MonoBehaviour
 {
@@ -25,6 +26,19 @@ public class GUI_Controller : MonoBehaviour
     [SerializeField]
     private UI_AmmoPanel _ammoPanel = null;
 
+    [SerializeField]
+    private UI_Cooldown _skill = null;
+    [SerializeField]
+    private UI_Cooldown _grenade = null;
+    [SerializeField]
+    private Text _energyCount = null;
+    public UI_Cooldown Skill { get => _skill; }
+    public UI_Cooldown Grenade { get => _grenade; }
+
+    [SerializeField]
+    private Image _blindMask = null;
+    Coroutine blind;
+
     private void Start()
     {
         Show(false);
@@ -34,6 +48,10 @@ public class GUI_Controller : MonoBehaviour
     {
         _healthBar.gameObject.SetActive(active);
         _ammoPanel.gameObject.SetActive(active);
+        _skill.gameObject.SetActive(active);
+        _grenade.gameObject.SetActive(active);
+        _energyCount.transform.parent.gameObject.SetActive(active);
+
     }
 
     public void UpdateLife(int current, int total)
@@ -52,5 +70,36 @@ public class GUI_Controller : MonoBehaviour
     public void HideAmmo()
     {
         _ammoPanel.gameObject.SetActive(false);
+    }
+
+    public void UpdateAbilityView(int i)
+    {
+        _energyCount.text = i.ToString();
+        _skill.UpdateCost(i);
+        _grenade.UpdateCost(i);
+    }
+
+    public void Flash()
+    {
+
+        if (blind != null)
+            StopCoroutine(blind);
+        blind = StartCoroutine(CRT_Blind(3f));
+    }
+
+    IEnumerator CRT_Blind(float f)
+    {
+        float startTime = Time.time;
+        while (startTime + f > Time.time)
+        {
+            _blindMask.color = new Color(1, 1, 1, 1);
+            yield return null;
+            while (startTime + f - 1 < Time.time && startTime + f > Time.time)
+            {
+                _blindMask.color = new Color(1, 1, 1, -(Time.time - (startTime + f)));
+                yield return null;
+            }
+        }
+        _blindMask.color = new Color(1, 1, 1, 0);
     }
 }

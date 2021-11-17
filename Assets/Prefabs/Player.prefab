@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1616009252474633807}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 100169920420807231}
@@ -69,6 +69,10 @@ GameObject:
   - component: {fileID: 3235629466801445534}
   - component: {fileID: -8604544027764392252}
   - component: {fileID: 7808424195374916866}
+  - component: {fileID: -3840120732951321934}
+  - component: {fileID: 2823964155430288679}
+  - component: {fileID: -2795652271365624747}
+  - component: {fileID: 1299882493800161942}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -150,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: f9a9dfdc-50b5-4b37-ba99-b3379b894dbd
-  _prefabId: 1
+  _prefabId: 5
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1
@@ -179,6 +183,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cam: {fileID: 4430843696061075625}
   _totalLife: 250
+  _skill: {fileID: -2795652271365624747}
+  _grenade: {fileID: 1299882493800161942}
 --- !u!114 &8763858178964373669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +249,73 @@ MonoBehaviour:
   - {fileID: 2370392426515826315, guid: 7469e4613949e15408fcde01ad1d68fd, type: 3}
   - {fileID: 2370392426515826315, guid: 1e51a46698b62444a95eddc79f161412, type: 3}
   - {fileID: 2370392426515826315, guid: 93d2ca14dbcbe8e449ebc8cbd9534702, type: 3}
+--- !u!114 &-3840120732951321934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966958027407819776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c888462808a6bae4cbd668a66780897a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cam: {fileID: 6123215903969840477}
+--- !u!114 &2823964155430288679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966958027407819776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a430a1945c7d942a537e4370e0635a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cam: {fileID: 6123215903969840477}
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  _wallPreset: {fileID: 6080585430974996886, guid: 544d56913579f174ca3b3cf0284d3ee0,
+    type: 3}
+  _stateMachine: {fileID: 3102823522176310559, guid: 03125e5df151d214d862d535ba014322,
+    type: 3}
+--- !u!114 &-2795652271365624747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966958027407819776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64bfc05bac3384846b4965ec7c6e35f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cam: {fileID: 6123215903969840477}
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 1
+--- !u!114 &1299882493800161942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966958027407819776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87101b4ebf7848a47adc65699f21ca37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objectPreview: {fileID: 6998093756824449213, guid: 2fc05e1fcb5f0784ca8dd3abf4df7aa6,
+    type: 3}
+  _objectToLaunch: {fileID: 3660738688224953292, guid: 515992dc61b1e4044931a75639ed6a0d,
+    type: 3}
+  _cam: {fileID: 6123215903969840477}
+  _launchForce: 20
 --- !u!1 &1966958027968379481
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,7 +684,7 @@ PrefabInstance:
     - target: {fileID: 992928720785831794, guid: d73c9057cbf52ef4eab04048aaae3726,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.01
+      value: 0.24
       objectReference: {fileID: 0}
     - target: {fileID: 992928720785831794, guid: d73c9057cbf52ef4eab04048aaae3726,
         type: 3}

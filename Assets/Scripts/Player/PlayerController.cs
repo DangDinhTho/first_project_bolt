@@ -5,6 +5,7 @@ public class PlayerController : EntityBehaviour<IPhysicState>
 {
     private PlayerMotor _playerMotor;
     private PlayerWeapons _playerWeapons;
+    private PlayerRenderer _playerRenderer;
     private bool _forward;
     private bool _backward;
     private bool _left;
@@ -18,6 +19,8 @@ public class PlayerController : EntityBehaviour<IPhysicState>
     private bool _reload;
     private int _wheel = 0;
     private bool _drop;
+    private bool _ability1;
+    private bool _ability2;
 
     private bool _hasControl = false;
 
@@ -29,6 +32,7 @@ public class PlayerController : EntityBehaviour<IPhysicState>
     {
         _playerMotor = GetComponent<PlayerMotor>();
         _playerWeapons = GetComponent<PlayerWeapons>();
+        _playerRenderer = GetComponent<PlayerRenderer>();
     }
 
     public override void Attached()
@@ -41,6 +45,7 @@ public class PlayerController : EntityBehaviour<IPhysicState>
 
         Init(entity.HasControl);
         _playerMotor.Init(entity.HasControl);
+        _playerRenderer.Init();
         _playerWeapons.Init();
     }
 
@@ -48,7 +53,6 @@ public class PlayerController : EntityBehaviour<IPhysicState>
     {
         if (isMine)
         {
-            Cursor.lockState = CursorLockMode.Locked;
             FindObjectOfType<PlayerSetupController>().SceneCamera.gameObject.SetActive(false);
         }
     }
@@ -71,6 +75,9 @@ public class PlayerController : EntityBehaviour<IPhysicState>
         _aiming = Input.GetMouseButton(1);
         _reload = Input.GetKey(KeyCode.R);
         _drop = Input.GetKey(KeyCode.G);
+
+        _ability1 = Input.GetKey(KeyCode.Q);
+        _ability2 = Input.GetKey(KeyCode.E);
 
         _yaw += Input.GetAxisRaw("Mouse X") * _mouseSensitivity;
         _yaw %= 360f;
@@ -100,9 +107,12 @@ public class PlayerController : EntityBehaviour<IPhysicState>
         input.Reload = _reload;
         input.Wheel = _wheel;
 
+        input.Ability1 = _ability1;
+        input.Ability2 = _ability2;
+
         entity.QueueInput(input);
 
-        _playerMotor.ExecuteCommand(_forward, _backward, _left, _right, _jump, _yaw, _pitch);
+        _playerMotor.ExecuteCommand(_forward, _backward, _left, _right, _jump, _yaw, _pitch, _ability1, _ability2);
         _playerWeapons.ExecuteCommand(_fire, _aiming, _reload, _wheel, BoltNetwork.ServerFrame % 1024, _drop);
     }
 
@@ -128,7 +138,9 @@ public class PlayerController : EntityBehaviour<IPhysicState>
                 cmd.Input.Right,
                 cmd.Input.Jump,
                 cmd.Input.Yaw,
-                cmd.Input.Pitch);
+                cmd.Input.Pitch,
+                cmd.Input.Ability1,
+                cmd.Input.Ability2);
 
                 _playerWeapons.ExecuteCommand(
                 cmd.Input.Fire,

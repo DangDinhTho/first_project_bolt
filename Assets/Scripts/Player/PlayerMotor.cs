@@ -24,9 +24,17 @@ public class PlayerMotor : EntityBehaviour<IPlayerState>
 
     SphereCollider _headCollider;
 
+    [SerializeField]
+    private Ability _skill = null;
+    [SerializeField]
+    private Ability _grenade = null;
+
+    private bool _isEnemy = true;
+
     public int TotalLife { get => _totalLife; }
     public float Speed { get => _speed; set => _speed = value; }
     public float SpeedBase { get => _speedBase; }
+    public bool IsEnemy { get => _isEnemy; }
 
     private void Awake()
     {
@@ -37,10 +45,40 @@ public class PlayerMotor : EntityBehaviour<IPlayerState>
     public void Init(bool isMine)
     {
         if (isMine)
-            _cam.gameObject.SetActive(true);
+        {
+            tag = "LocalPlayer";
+            GUI_Controller.Current.UpdateLife(_totalLife, _totalLife);
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+            foreach (GameObject go in players)
+            {
+                go.GetComponent<PlayerMotor>().TeamCheck();
+                go.GetComponent<PlayerRenderer>().Init();
+            }
+        }
+
+        TeamCheck();
     }
 
-    public State ExecuteCommand(bool forward, bool backward, bool left, bool right, bool jump, float yaw, float pitch)
+    public void TeamCheck()
+    {
+        GameObject localPlayer = GameObject.FindGameObjectWithTag("LocalPlayer");
+        Team t = Team.AT;
+        PlayerToken pt = (PlayerToken)entity.AttachToken;
+
+        if (localPlayer)
+        {
+            PlayerToken lpt = (PlayerToken)localPlayer.GetComponent<PlayerMotor>().entity.AttachToken;
+            t = lpt.team;
+        }
+
+        if (pt.team == t)
+            _isEnemy = false;
+        else
+            _isEnemy = true;
+    }
+
+    public State ExecuteCommand(bool forward, bool backward, bool left, bool right, bool jump, float yaw, float pitch, bool ability1, bool ability2)
     {
         Vector3 movingDir = Vector3.zero;
         if (forward ^ backward)
@@ -76,6 +114,11 @@ public class PlayerMotor : EntityBehaviour<IPlayerState>
 
         if (entity.IsOwner)
             state.Pitch = (int)pitch;
+
+        if (_skill)
+            _skill.UpdateAbility(ability1);
+        if (_grenade)
+            _grenade.UpdateAbility(ability2);
 
         State stateMotor = new State();
         stateMotor.position = transform.position;
